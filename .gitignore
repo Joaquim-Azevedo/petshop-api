@@ -1,33 +1,54 @@
-HELP.md
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+# Compilados do Java
+*.class
+*.jar
+*.war
+*.ear
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+# Diretórios de build
+/build/
+/target/
+/out/
 
-### IntelliJ IDEA ###
-.idea
-*.iws
+*.log
+
+.DS_Store
+Thumbs.db
+
+*.swp
+*.swo
+*.tmp
+
+# IntelliJ
+.idea/
 *.iml
-*.ipr
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### VS Code ###
+# VS Code
 .vscode/
+
+.env
+*.env
+
+# Test reports
+/test-output/
+/surefire-reports/
+/jacoco.exec
+
+# Maven wrapper
+.mvn/
+!/.mvn/wrapper/maven-wrapper.jar
+mvnw
+mvnw.cmd
+
+*.h2.db
+*.mv.db
+
+*.lock
+*.log
+*.bak
+*.tmp
+
+docker-compose.override.yml
+
+*.csv
+*.xml
+*.yml
