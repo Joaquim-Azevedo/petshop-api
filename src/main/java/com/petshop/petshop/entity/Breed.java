@@ -1,6 +1,6 @@
 package com.petshop.petshop.entity;
 
-import com.petshop.petshop.dto.BreedDTO;
+import com.petshop.petshop.dto.animal.BreedDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

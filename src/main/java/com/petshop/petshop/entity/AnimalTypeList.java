@@ -1,6 +1,6 @@
 package com.petshop.petshop.entity;
 
-import com.petshop.petshop.dto.AnimalTypeDTO;
+import com.petshop.petshop.dto.animal.AnimalTypeDTO;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

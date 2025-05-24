@@ -1,7 +1,7 @@
 package com.petshop.petshop.entity;
 
-import com.petshop.petshop.dto.OwnerDTO;
-import com.petshop.petshop.dto.OwnerResponse;
+import com.petshop.petshop.dto.owner.OwnerDTO;
+import com.petshop.petshop.dto.owner.OwnerResponse;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
