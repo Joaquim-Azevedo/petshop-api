@@ -1,4 +1,6 @@
-package com.petshop.petshop.dto;
+package com.petshop.petshop.dto.animal;
+
+import com.petshop.petshop.dto.owner.OwnerResponse;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

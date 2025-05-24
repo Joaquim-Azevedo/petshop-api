@@ -1,4 +1,4 @@
-package com.petshop.petshop.dto;
+package com.petshop.petshop.dto.owner;
 
 import com.petshop.petshop.entity.Owner;
 

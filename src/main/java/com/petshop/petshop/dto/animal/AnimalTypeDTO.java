@@ -1,4 +1,4 @@
-package com.petshop.petshop.dto;
+package com.petshop.petshop.dto.animal;
 
 import com.petshop.petshop.entity.AnimalTypeList;
 
