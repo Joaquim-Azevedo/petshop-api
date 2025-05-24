@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.petshop.petshop.dto.owner.OwnerDTO;
 import com.petshop.petshop.dto.owner.OwnerResponse;
 import com.petshop.petshop.dto.owner.OwnerWithAnimalsResponse;
+import com.petshop.petshop.service.AnimalService;
 import com.petshop.petshop.service.OwnerService;
 
 import jakarta.transaction.Transactional;
@@ -25,6 +26,9 @@ public class OwnerController {
 
     @Autowired
     private OwnerService ownerService;
+
+    @Autowired
+    private AnimalService animalService;
  
     @GetMapping
     public List<OwnerResponse> getAllOwners() {
@@ -42,8 +46,9 @@ public class OwnerController {
         return ownerService.addOwner(owner);
     }
 
-    @DeleteMapping
-    public void deleteOwnerByCpf(@Valid String cpf) {
+    @DeleteMapping("/{cpf}")
+    public void deleteOwnerByCpf(@PathVariable @Valid String cpf) {
+        animalService.deleteAllOwnerAnimals(cpf);
         ownerService.deleteOwnerByCpf(cpf);
     }
 }

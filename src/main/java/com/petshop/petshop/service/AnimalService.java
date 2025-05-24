@@ -100,4 +100,9 @@ public class AnimalService {
         }
     }
 
+    public void deleteAllOwnerAnimals(String cpf) {
+        animalRepository.findAllByOwnerCpf(cpf).stream()
+                .forEach(t -> t.setActive(false));
+    }
+
 }
