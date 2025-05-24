@@ -42,8 +42,8 @@ public class OwnerController {
         return ownerService.addOwner(owner);
     }
 
-    @DeleteMapping
-    public void deleteOwnerByCpf(@Valid String cpf) {
+    @DeleteMapping("/{cpf}")
+    public void deleteOwnerByCpf(@PathVariable @Valid String cpf) {
         ownerService.deleteOwnerByCpf(cpf);
     }
 }
