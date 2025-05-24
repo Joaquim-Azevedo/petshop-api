@@ -1,0 +1,49 @@
+package com.petshop.petshop.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.petshop.petshop.dto.owner.OwnerDTO;
+import com.petshop.petshop.dto.owner.OwnerResponse;
+import com.petshop.petshop.dto.owner.OwnerWithAnimalsResponse;
+import com.petshop.petshop.service.OwnerService;
+
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+
+@RestController
+@RequestMapping("/owner")
+public class OwnerController {
+
+    @Autowired
+    private OwnerService ownerService;
+ 
+    @GetMapping
+    public List<OwnerResponse> getAllOwners() {
+        return ownerService.getAllOwners();
+    }
+
+    @GetMapping("/{cpf}")
+    public OwnerWithAnimalsResponse getOwnerWithAnimals(@PathVariable @Valid String cpf) {
+        return ownerService.getOwnerWithAnimalsByCpf(cpf);
+    }
+
+    @Transactional
+    @PostMapping
+    public OwnerDTO addOwner(@RequestBody @Valid OwnerDTO owner) {
+        return ownerService.addOwner(owner);
+    }
+
+    @DeleteMapping
+    public void deleteOwnerByCpf(@Valid String cpf) {
+        ownerService.deleteOwnerByCpf(cpf);
+    }
+}
