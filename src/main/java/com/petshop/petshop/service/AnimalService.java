@@ -7,12 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.petshop.petshop.dto.animal.AnimalDTO;
 import com.petshop.petshop.dto.animal.AnimalRequest;
-import com.petshop.petshop.dto.animal.AnimalTypeDTO;
-import com.petshop.petshop.dto.animal.BreedDTO;
-import com.petshop.petshop.dto.owner.OwnerResponse;
+import com.petshop.petshop.dto.animal.AnimalResponse;
 import com.petshop.petshop.entity.Animal;
 import com.petshop.petshop.repository.AnimalRepository;
-import com.petshop.petshop.repository.AnimalTypeListRepository;
 import com.petshop.petshop.repository.BreedRepository;
 import com.petshop.petshop.repository.OwnerRepository;
 
@@ -27,73 +24,64 @@ public class AnimalService {
 
     @Autowired
     private BreedRepository breedRepository;
-
-    @Autowired
-    private AnimalTypeListRepository listRepository;
-
  
-    public AnimalRequest addAnimal(AnimalDTO dto) {
-        var owner = ownerRepository.findOwnerByCpf(dto.getOwnerCpf());
-        var breed = breedRepository.findByNormalizedName(dto.getBreed());
+    public AnimalDTO addAnimal(AnimalRequest request) {
+        var owner = ownerRepository.findOwnerByCpf(request.getOwnerCpf());
+        var breed = breedRepository.findByNormalizedName(request.getBreed());
 
-        var animalType = new AnimalTypeDTO(listRepository
-            .findById(breed.getType().getId()).get(), new BreedDTO(breed));
-
-        // Creating animal with dto getters manually
-        var animal = new Animal(
-                dto.getId(), 
-                dto.getName(), 
-                dto.getNeutred(), 
-                dto.getActive(),
+        // Creating animal with the request manually
+        Animal animal = new Animal(
+                request.getId(), 
+                request.getName(), 
+                request.isCastrated(), 
+                request.isActive(),
                 breed, 
                 owner);
+
         animalRepository.save(animal);
 
-        return new AnimalRequest(
-            animal.getId(),
-            animal.getName(),
-            animal.isNeutred(),
-            animal.isActive(),
-            animalType,
-            new OwnerResponse(owner)
-        );
+        return new AnimalDTO(animal);
     }
 
-    public AnimalDTO getAnimalById(String id) {
+    // to implement
+    public AnimalResponse getAnimalById(String id) {
         var optionalAnimal = animalRepository.findById(id);
         if (optionalAnimal.isPresent()) {
-                var animal = optionalAnimal.get();
-                return new AnimalDTO(animal);
+                Animal animal = optionalAnimal.get();
+                return new AnimalResponse(animal);
         } else {
                 throw new RuntimeException("Animal not found");
         }
     }
 
-    public List<AnimalDTO> getAllAnimals() {
-        return animalRepository.findAll().stream()
-                .map(t -> new AnimalDTO(
-                    t.getId(),
-                    t.getName(),
-                    t.isNeutred(),
-                    t.isActive(),
-                    t.getBreed().getName(),
-                    t.getOwner().getCpf()))
+    public List<AnimalResponse> getAllActiveAnimals() {
+        return animalRepository.findAllByActiveTrue().stream()
+                .map(t -> new AnimalResponse(t))
                 .toList();
-                
     }
 
-    public List<AnimalDTO> getAnimalsByOwnerCpf(String cpf) {
+    public List<AnimalResponse> getAnimalsByOwnerCpf(String cpf) {
         return animalRepository.findAllByOwnerCpf(cpf).stream()
-                .map(t -> new AnimalDTO(t))
+                .map(t -> new AnimalResponse(t))
                 .toList();
     }
 
-    // Update
-
-    public void deleteAnimal(String id) {
+    // Update --> neutred
+    public AnimalResponse castrateAnimalById(String id) {
         var optionalAnimal = animalRepository.findById(id);
         if (optionalAnimal.isPresent()) {
-                var animal = optionalAnimal.get();
+                Animal animal = optionalAnimal.get();
+                animal.setCastrated(true);
+                return new AnimalResponse(animal);
+        } else {
+                throw new RuntimeException("Animal not found or inexistent");
+        }
+    }
+
+    public void deleteAnimalById(String id) {
+        var optionalAnimal = animalRepository.findById(id);
+        if (optionalAnimal.isPresent()) {
+                Animal animal = optionalAnimal.get();
                 animal.setActive(false);
         } else {
                 throw new RuntimeException("Animal not found");

@@ -1,10 +1,10 @@
 package com.petshop.petshop.dto.animal;
 
+import com.petshop.petshop.dto.owner.OwnerResponse;
 import com.petshop.petshop.entity.Animal;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 public class AnimalDTO {
     
@@ -14,36 +14,33 @@ public class AnimalDTO {
     private String name;
     
     @NotNull
-    private Boolean neutred;
+    private Boolean castrated;
+    private Boolean active;
+    private AnimalTypeDTO type;
 
-    private Boolean active = true;
-
-    @NotBlank(message = "Breed can't be blank")
-    private String breed;
-
-    @NotBlank
-    @Size(max = 11)
-    private String ownerCpf;
+    private OwnerResponse owner;
 
     public AnimalDTO(Animal animal) {
+        id = animal.getId();
         name = animal.getName();
-        neutred = animal.isNeutred();
+        castrated = animal.isCastrated();
         active = animal.isActive();
-        ownerCpf = animal.getOwner().getCpf();
+        type = new AnimalTypeDTO(animal.getBreed().getType(),
+                new BreedDTO(animal.getBreed()));
+        owner = new OwnerResponse(animal.getOwner());
     }
 
-    public AnimalDTO(String id, String name, Boolean neutred, Boolean active, String breed,
-            String ownerCpf) {
+    public AnimalDTO(String id, @NotBlank String name, @NotNull Boolean castrated, Boolean active, AnimalTypeDTO type,
+            OwnerResponse owner) {
         this.id = id;
         this.name = name;
-        this.neutred = neutred;
-        this.active = true;
-        this.breed = breed;
-        this.ownerCpf = ownerCpf;
+        this.castrated = castrated;
+        this.active = active;
+        this.type = type;
+        this.owner = owner;
     }
 
     public AnimalDTO() {
-
     }
 
     public String getId() {
@@ -54,19 +51,19 @@ public class AnimalDTO {
         return name;
     }
 
-    public Boolean getNeutred() {
-        return neutred;
+    public Boolean isCastrated() {
+        return castrated;
     }
 
-    public Boolean getActive() {
+    public Boolean isActive() {
         return active;
     }
 
-    public String getBreed() {
-        return breed;
+    public AnimalTypeDTO getType() {
+        return type;
     }
 
-    public String getOwnerCpf() {
-        return ownerCpf;
+    public OwnerResponse getOwner() {
+        return owner;
     }
 }

@@ -49,3 +49,6 @@ INSERT INTO tb_breeds (type_id, name, normalized_name) VALUES (2, 'Cornish Rex',
 INSERT INTO tb_breeds (type_id, name, normalized_name) VALUES (2, 'Devon Rex', 'devonrex');
 INSERT INTO tb_breeds (type_id, name, normalized_name) VALUES (2, 'Selkirk Rex', 'selkirkrex');
 INSERT INTO tb_breeds (type_id, name, normalized_name) VALUES (2, 'Manx', 'manx');
+
+INSERT INTO tb_owner (active, cpf, phone, email, name) VALUES (1, '00011122233', '00111112222', 'joaquim@teste.com', 'Joaquim Azevedo')
+INSERT INTO tb_animal (active, castrated, breed_id, owner_id, name, id) VALUES (1, 0, 9, 1, 'Sheik', '7ce715f9-534f-4f31-bf51-ce30f08459e8')

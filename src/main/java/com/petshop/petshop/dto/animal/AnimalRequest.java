@@ -1,9 +1,10 @@
 package com.petshop.petshop.dto.animal;
 
-import com.petshop.petshop.dto.owner.OwnerResponse;
+import com.petshop.petshop.entity.Animal;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class AnimalRequest {
     
@@ -13,23 +14,36 @@ public class AnimalRequest {
     private String name;
     
     @NotNull
-    private Boolean neutred;
-    private Boolean active;
-    private AnimalTypeDTO type;
+    private Boolean castrated;
 
-    private OwnerResponse owner;
+    private Boolean active = true;
 
-    public AnimalRequest(String id, @NotBlank String name, @NotNull Boolean neutred, Boolean active, AnimalTypeDTO type,
-            OwnerResponse owner) {
+    @NotBlank(message = "Breed can't be blank")
+    private String breed;
+
+    @NotBlank
+    @Size(max = 11)
+    private String ownerCpf;
+
+    public AnimalRequest(Animal animal) {
+        name = animal.getName();
+        castrated = animal.isCastrated();
+        active = animal.isActive();
+        ownerCpf = animal.getOwner().getCpf();
+    }
+
+    public AnimalRequest(String id, String name, Boolean castrated, Boolean active, String breed,
+            String ownerCpf) {
         this.id = id;
         this.name = name;
-        this.neutred = neutred;
-        this.active = active;
-        this.type = type;
-        this.owner = owner;
+        this.castrated = castrated;
+        this.active = true;
+        this.breed = breed;
+        this.ownerCpf = ownerCpf;
     }
 
     public AnimalRequest() {
+
     }
 
     public String getId() {
@@ -40,19 +54,19 @@ public class AnimalRequest {
         return name;
     }
 
-    public Boolean getNeutred() {
-        return neutred;
+    public Boolean isCastrated() {
+        return castrated;
     }
 
-    public Boolean getActive() {
+    public Boolean isActive() {
         return active;
     }
 
-    public AnimalTypeDTO getType() {
-        return type;
+    public String getBreed() {
+        return breed;
     }
 
-    public OwnerResponse getOwner() {
-        return owner;
+    public String getOwnerCpf() {
+        return ownerCpf;
     }
 }

@@ -18,7 +18,7 @@ public class Animal {
     @Column(length = 36)
     private String id;
     private String name;
-    private boolean neutred;
+    private boolean castrated;
     private boolean active;
 
     @ManyToOne
@@ -29,10 +29,10 @@ public class Animal {
     @JoinColumn(name = "owner_id")
     private Owner owner;
 
-    public Animal(String id, String name, boolean neutred, boolean active, Breed breed, Owner owner) {
+    public Animal(String id, String name, boolean castrated, boolean active, Breed breed, Owner owner) {
         this.id = id;
         this.name = name;
-        this.neutred = neutred;
+        this.castrated = castrated;
         this.active = active;
         this.breed = breed;
         this.owner = owner;
@@ -66,12 +66,12 @@ public class Animal {
         this.breed = breed;
     }
 
-    public boolean isNeutred() {
-        return neutred;
+    public boolean isCastrated() {
+        return castrated;
     }
 
-    public void setNeutred(boolean neutred) {
-        this.neutred = neutred;
+    public void setCastrated(boolean castrated) {
+        this.castrated = castrated;
     }
 
     public boolean isActive() {

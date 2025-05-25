@@ -6,10 +6,10 @@ import com.petshop.petshop.dto.animal.AnimalResponse;
 
 public class OwnerWithAnimalsResponse {
     
-    OwnerResponse owner;
+    OwnerDTO owner;
     List<AnimalResponse> animals;
 
-    public OwnerWithAnimalsResponse(OwnerResponse owner, List<AnimalResponse> animals) {
+    public OwnerWithAnimalsResponse(OwnerDTO owner, List<AnimalResponse> animals) {
         this.owner = owner;
         this.animals = animals;
     }
@@ -22,7 +22,7 @@ public class OwnerWithAnimalsResponse {
         return animals;
     }
 
-    public OwnerResponse getOwner() {
+    public OwnerDTO getOwner() {
         return owner;
     }
 }
