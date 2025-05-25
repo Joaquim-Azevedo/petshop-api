@@ -47,11 +47,13 @@ cd petshop-api
 
 ### 🐾 Animais
 
-| Método | Endpoint    | Descrição                                                                 |
-| ------ | ----------- | ------------------------------------------------------------------------- |
-| POST   | `/pet`      | Cadastrar um novo animal -> Necessário ter um dono préviamente cadastrado |
-| GET    | `/pet`      | Listar todos os animais                                                   |
-| GET    | `/pet/{id}` | Buscar animal por ID                                                      |
+| Método | Endpoint         | Descrição                                                                 |
+| ------ | ---------------- | ------------------------------------------------------------------------- |
+| POST   | `/pet`           | Cadastrar um novo animal -> Necessário ter um dono préviamente cadastrado |
+| GET    | `/pet`           | Listar todos os animais                                                   |
+| GET    | `/pet/{id}`      | Buscar animal por ID                                                      |
+| PUT    | `/castrate/{id}` | Seta 'castrated' para true (castra o animal) por ID                       |
+| DELETE | `/pet/{id}`      | Deleta (inativa) apenas o animal por ID                                   |
 
 **Exemplo de requisição:**
 
@@ -72,7 +74,7 @@ POST /animais
 | Método | Endpoint       | Descrição                                          |
 | ------ | -------------- | -------------------------------------------------- |
 | POST   | `/owner`       | Cadastrar um novo dono                             |
-| GET    | `/owner`       | Listar todos os donos                              |
+| GET    | `/owner`       | Listar todos os donos que tem active = true        |
 | GET    | `/owner/{cpf}` | Buscar dono por CPF (com animais)                  |
 | DELETE | `/owner/{cpf}` | Inativa (deleta) o usuário e todos os seus animais |
 
@@ -95,12 +97,13 @@ POST /animais
 
 ## Melhorias Futuras
 
-- [ ] Adicionar validações com `javax.validation`
-- [ ] Criar testes com JUnit + Mockito
-- [ ] Refatorar nomes dos DTOs
-- [ ] Implementar tratamento global de exceções (`@ControllerAdvice`)
-- [ ] Melhorar requisições aninhadas
-- [ ] Adicionar serviços do petshop
+- [⏳] Adicionar mais validações com `javax.validation`
+- [ ] Criar testes com JUnit + Mockito (ainda aprendendo sobre)
+- [✅] Refatorar nomes dos DTOs
+- [⏳] Implementar tratamento global de exceções (`@ControllerAdvice`)
+- [✅] Melhorar requisições aninhadas
+- [⏳] Adicionar serviços do petshop
+- [✅] Melhorar uso dos `.get()` em `Optional`
 
 ---
 
