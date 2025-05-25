@@ -32,7 +32,7 @@ public class OwnerController {
  
     @GetMapping
     public List<OwnerResponse> getAllOwners() {
-        return ownerService.getAllOwners();
+        return ownerService.getAllActiveOwners();
     }
 
     @GetMapping("/{cpf}")
@@ -46,6 +46,7 @@ public class OwnerController {
         return ownerService.addOwner(owner);
     }
 
+    @Transactional
     @DeleteMapping("/{cpf}")
     public void deleteOwnerByCpf(@PathVariable @Valid String cpf) {
         animalService.deleteAllOwnerAnimals(cpf);
