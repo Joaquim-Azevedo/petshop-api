@@ -9,5 +9,6 @@ import com.petshop.petshop.entity.Animal;
 public interface AnimalRepository extends JpaRepository<Animal, String>{
     
     List<Animal> findAllByOwnerCpf(String cpf);
+    List<Animal> findAllByActiveTrue();
 
 }
