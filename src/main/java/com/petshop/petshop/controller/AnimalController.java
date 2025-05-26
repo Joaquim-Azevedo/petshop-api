@@ -33,7 +33,7 @@ public class AnimalController {
     }
 
     @GetMapping("/{cpf}")
-    public List<AnimalResponse> getAnimalsByOwnerCpf(@PathVariable @Valid String cpf) {
+    public List<AnimalResponse> getAnimalsByOwnerCpf(@PathVariable String cpf) {
         return animalService.getAnimalsByOwnerCpf(cpf);
     }
     
@@ -45,13 +45,13 @@ public class AnimalController {
     
     @Transactional
     @PutMapping("/{cpf}")
-    public AnimalDTO reactiveAnimalById(@PathVariable @Valid String cpf) {
+    public AnimalDTO reactiveAnimalById(@PathVariable String cpf) {
         return animalService.reactiveAnimalById(cpf);
     }
 
     @Transactional
     @PutMapping("/castrate/{id}")
-    public AnimalResponse castrateAnimalById(@PathVariable @Valid String id) {
+    public AnimalResponse castrateAnimalById(@PathVariable String id) {
         return animalService.castrateAnimalById(id);
     }
 

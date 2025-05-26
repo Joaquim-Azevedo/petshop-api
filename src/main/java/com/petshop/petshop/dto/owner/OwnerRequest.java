@@ -2,8 +2,9 @@ package com.petshop.petshop.dto.owner;
 
 import com.petshop.petshop.entity.Owner;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Pattern;
 
 public class OwnerRequest {
 
@@ -11,14 +12,15 @@ public class OwnerRequest {
     private String name;
 
     @NotBlank
-    @Size(max = 11)
+    @Pattern(regexp = "\\d{11}")
     private String cpf;
 
     @NotBlank
-    @Size(max = 11)
+    @Pattern(regexp = "\\d{11}")
     private String phone;
 
     @NotBlank
+    @Email
     private String email;
 
     private Boolean active;

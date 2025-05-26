@@ -10,7 +10,7 @@ public class BreedDTO {
         name = breed.getName();
     }
 
-    public BreedDTO(Long id, String name) {
+    public BreedDTO(String name) {
         this.name = name;
     }
 

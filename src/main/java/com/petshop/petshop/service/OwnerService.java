@@ -12,6 +12,8 @@ import com.petshop.petshop.dto.owner.OwnerResponse;
 import com.petshop.petshop.dto.owner.OwnerWithAnimalsResponse;
 import com.petshop.petshop.entity.Animal;
 import com.petshop.petshop.entity.Owner;
+import com.petshop.petshop.exceptions.InvalidArgumentException;
+import com.petshop.petshop.exceptions.OwnerNotFound;
 import com.petshop.petshop.repository.AnimalRepository;
 import com.petshop.petshop.repository.OwnerRepository;
 
@@ -29,19 +31,26 @@ public class OwnerService {
         if (!ownerRepository.existsByCpf(request.getCpf())) {
             return new OwnerDTO(ownerRepository.save(new Owner(request)));
         } else {
-            throw new RuntimeException("Owner with this CPF already exists");
+            throw new RuntimeException("Dono/cliente com esse CPF já existe");
         }
     }
 
     public List<OwnerResponse> getAllActiveOwners() {
         // Mapping all owners to owner 'response' 
         List<Owner> result = ownerRepository.findAllByActiveTrue();
-        return result.stream().map(t -> new OwnerResponse(t))
+        return result.stream()
+                .map(OwnerResponse::new)
                 .toList();
     }
 
     public OwnerWithAnimalsResponse getOwnerWithAnimalsByCpf(String cpf) {
-        OwnerDTO ownerDTO = new OwnerDTO(ownerRepository.findOwnerByCpf(cpf));
+        if(cpf == null || cpf.length() != 11 || !cpf.matches("\\d+")) {
+            throw new InvalidArgumentException("CPF inválido: deve conter 11 dígitos numéricos");
+        }
+
+        OwnerDTO ownerDTO = new OwnerDTO(ownerRepository.findOwnerByCpf(cpf)
+                .orElseThrow(
+                    () -> new OwnerNotFound("Dono/cliente com cpf '" + cpf + "' não encontrado")));
         List<Animal> animals = animalRepository.findAllByOwnerCpf(cpf);
         
         // mapping animals to animal 'response'
@@ -56,23 +65,26 @@ public class OwnerService {
     }
 
     public OwnerDTO reactiveOwnerWithAnimals(String cpf) {
-        Owner owner = ownerRepository.findOwnerByCpf(cpf);
-        
-        if (owner != null) {
-            owner.setActive(true);
-            var ownerDTO = new OwnerDTO(owner);
-            return ownerDTO;
-        } else {
-            throw new RuntimeException("Owner not found");
+        if(cpf == null || cpf.length() != 11 || !cpf.matches("\\d+")) {
+            throw new InvalidArgumentException("CPF inválido: deve conter 11 dígitos numéricos");
         }
+        Owner owner = ownerRepository.findOwnerByCpf(cpf)
+                .orElseThrow(
+                    () -> new OwnerNotFound("Dono/cliente com cpf '" + cpf + "' não encontrado"));
+        
+        owner.setActive(true);
+        var ownerDTO = new OwnerDTO(owner);
+        return ownerDTO;
+        
     }
 
     public void deleteOwnerByCpf(String cpf) {
-        var owner = ownerRepository.findOwnerByCpf(cpf);
-        if(owner != null) {
-            owner.setActive(false);
-        } else {
-            throw new RuntimeException("Owner not found");
+        if(cpf == null || cpf.length() != 11 || !cpf.matches("\\d")) {
+            throw new InvalidArgumentException("CPF inválido: deve conter 11 dígitos numéricos");
         }
+        var owner = ownerRepository.findOwnerByCpf(cpf)
+                .orElseThrow(
+                    () -> new OwnerNotFound("Dono/cliente com cpf '" + cpf + "' não encontrado"));
+        owner.setActive(false);
     }
 }

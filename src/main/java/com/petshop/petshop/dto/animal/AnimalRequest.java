@@ -4,7 +4,7 @@ import com.petshop.petshop.entity.Animal;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Pattern;
 
 public class AnimalRequest {
 
@@ -18,7 +18,7 @@ public class AnimalRequest {
     private String breed;
 
     @NotBlank
-    @Size(max = 11)
+    @Pattern(regexp = "\\d{11}")
     private String ownerCpf;
 
     public AnimalRequest(Animal animal) {

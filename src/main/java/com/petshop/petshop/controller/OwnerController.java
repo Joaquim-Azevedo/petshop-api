@@ -38,7 +38,7 @@ public class OwnerController {
     }
 
     @GetMapping("/{cpf}")
-    public OwnerWithAnimalsResponse getOwnerWithAnimals(@PathVariable @Valid String cpf) {
+    public OwnerWithAnimalsResponse getOwnerWithAnimals(@PathVariable String cpf) {
         return ownerService.getOwnerWithAnimalsByCpf(cpf);
     }
 
@@ -50,13 +50,13 @@ public class OwnerController {
 
     @Transactional
     @PutMapping("/{cpf}")
-    public OwnerDTO reactiveAllOwnerWithAnimals(@PathVariable @Valid String cpf) {
+    public OwnerDTO reactiveAllOwnerWithAnimals(@PathVariable String cpf) {
         return ownerService.reactiveOwnerWithAnimals(cpf);
     }
 
     @Transactional
     @DeleteMapping("/{cpf}")
-    public void deleteOwnerByCpf(@PathVariable @Valid String cpf) {
+    public void deleteOwnerByCpf(@PathVariable String cpf) {
         animalService.deleteAllOwnerAnimals(cpf);
         ownerService.deleteOwnerByCpf(cpf);
     }
