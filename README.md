@@ -16,69 +16,46 @@ API REST desenvolvida com Spring Boot para gerenciar animais, donos e serviços 
 
 ```bash
 git clone https://github.com/Joaquim-Azevedo/petshop-api.git
+```
+
+3. Entre no diretório do projeto:
+
+```bash
 cd petshop-api
 ```
 
-2. Execute com Maven:
+3. Execute com Maven:
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-3. Acesse a API localmente:
+4. Acesse a API localmente:
 
 - Base URL: [http://localhost:8080](http://localhost:8080)
+
+5. Para documentação da API, acesse:
+
+- SwaggerUI URL: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html/)
 
 ---
 
 ## Funcionalidades
 
-- Cadastro de animais
+- Cadastro e consulta de animais
 - Cadastro e consulta de donos
 - Associação de animal a dono
 - Consulta de dono com seus animais
-- Cadastro e consulta de raças e tipos de animais
-- Cadastro de serviços (banho, tosa, consulta veterinária)
-- Cálculo de preço de serviço com base nas características do animal
+- Deleção e reativação de animais e donos
+- Cadastro automático de tipo de animal e raça
 
 ---
 
-## Endpoints da API
+## Documentação de API com Swagger
 
-### 🐾 Animais
+1. Com o projeto executado, acesse:
 
-| Método | Endpoint         | Descrição                                                                 |
-| ------ | ---------------- | ------------------------------------------------------------------------- |
-| POST   | `/pet`           | Cadastrar um novo animal -> Necessário ter um dono préviamente cadastrado |
-| GET    | `/pet`           | Listar todos os animais                                                   |
-| GET    | `/pet/{id}`      | Buscar animal por ID                                                      |
-| PUT    | `/castrate/{id}` | Seta 'castrated' para true (castra o animal) por ID                       |
-| DELETE | `/pet/{id}`      | Deleta (inativa) apenas o animal por ID                                   |
-
-**Exemplo de requisição:**
-
-```json
-POST /animais
-{
-  "name": "Rex",
-  "neutred": true,
-  "breed": "Labrador",
-  "ownerCpf": "12345678900"
-}
-```
-
----
-
-### 👤 Donos
-
-| Método | Endpoint       | Descrição                                          |
-| ------ | -------------- | -------------------------------------------------- |
-| POST   | `/owner`       | Cadastrar um novo dono                             |
-| GET    | `/owner`       | Listar todos os donos que tem active = true        |
-| GET    | `/owner/{cpf}` | Buscar dono por CPF (com animais)                  |
-| DELETE | `/owner/{cpf}` | Inativa (deleta) o usuário e todos os seus animais |
-
----
+- SwaggerUI URL: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html/)
 
 ---
 
@@ -97,13 +74,14 @@ POST /animais
 
 ## Melhorias Futuras
 
-- [⏳] Adicionar mais validações com `javax.validation`
+- [✅] Adicionar mais validações
 - [ ] Criar testes com JUnit + Mockito (ainda aprendendo sobre)
 - [✅] Refatorar nomes dos DTOs
 - [⏳] Implementar tratamento global de exceções (`@ControllerAdvice`)
 - [✅] Melhorar requisições aninhadas
 - [⏳] Adicionar serviços do petshop
 - [✅] Melhorar uso dos `.get()` em `Optional`
+- [✅] Documentação de API com Swagger UI
 
 ---
 
