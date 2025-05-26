@@ -21,7 +21,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/pet")
+@RequestMapping("api/v1/pet")
 public class AnimalController {
     
     @Autowired
@@ -36,17 +36,23 @@ public class AnimalController {
     public List<AnimalResponse> getAnimalsByOwnerCpf(@PathVariable @Valid String cpf) {
         return animalService.getAnimalsByOwnerCpf(cpf);
     }
+    
+    @Transactional
+    @PostMapping
+    public AnimalDTO addAnimal(@RequestBody @Valid AnimalRequest request) {
+        return animalService.addAnimal(request);
+    }
+    
+    @Transactional
+    @PutMapping("/{cpf}")
+    public AnimalDTO reactiveAnimalById(@PathVariable @Valid String cpf) {
+        return animalService.reactiveAnimalById(cpf);
+    }
 
     @Transactional
     @PutMapping("/castrate/{id}")
     public AnimalResponse castrateAnimalById(@PathVariable @Valid String id) {
         return animalService.castrateAnimalById(id);
-    }
-
-    @Transactional
-    @PostMapping
-    public AnimalDTO addAnimal(@RequestBody @Valid AnimalRequest request) {
-        return animalService.addAnimal(request);
     }
 
     @Transactional

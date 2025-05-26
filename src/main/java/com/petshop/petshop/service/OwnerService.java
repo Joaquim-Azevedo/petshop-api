@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.petshop.petshop.dto.animal.AnimalResponse;
 import com.petshop.petshop.dto.owner.OwnerDTO;
+import com.petshop.petshop.dto.owner.OwnerRequest;
 import com.petshop.petshop.dto.owner.OwnerResponse;
 import com.petshop.petshop.dto.owner.OwnerWithAnimalsResponse;
 import com.petshop.petshop.entity.Animal;
@@ -23,9 +24,13 @@ public class OwnerService {
     @Autowired
     private AnimalRepository animalRepository;
 
-    public OwnerDTO addOwner(OwnerDTO dto) {
+    public OwnerDTO addOwner(OwnerRequest request) {
         // To return a DTO and not a ENTITY "Owner"
-        return new OwnerDTO(ownerRepository.save(new Owner(dto)));
+        if (!ownerRepository.existsByCpf(request.getCpf())) {
+            return new OwnerDTO(ownerRepository.save(new Owner(request)));
+        } else {
+            throw new RuntimeException("Owner with this CPF already exists");
+        }
     }
 
     public List<OwnerResponse> getAllActiveOwners() {
@@ -48,6 +53,18 @@ public class OwnerService {
                     animalstoResponse
             ); 
         return response;
+    }
+
+    public OwnerDTO reactiveOwnerWithAnimals(String cpf) {
+        Owner owner = ownerRepository.findOwnerByCpf(cpf);
+        
+        if (owner != null) {
+            owner.setActive(true);
+            var ownerDTO = new OwnerDTO(owner);
+            return ownerDTO;
+        } else {
+            throw new RuntimeException("Owner not found");
+        }
     }
 
     public void deleteOwnerByCpf(String cpf) {

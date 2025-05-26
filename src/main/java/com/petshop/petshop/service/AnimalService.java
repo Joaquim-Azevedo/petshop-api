@@ -31,10 +31,10 @@ public class AnimalService {
 
         // Creating animal with the request manually
         Animal animal = new Animal(
-                request.getId(), 
+                null, 
                 request.getName(), 
                 request.isCastrated(), 
-                request.isActive(),
+                true,
                 breed, 
                 owner);
 
@@ -75,6 +75,17 @@ public class AnimalService {
                 return new AnimalResponse(animal);
         } else {
                 throw new RuntimeException("Animal not found or inexistent");
+        }
+    }
+
+    public AnimalDTO reactiveAnimalById(String id) {
+        var optionalAnimal = animalRepository.findById(id);
+        if (optionalAnimal.isPresent()) {
+            Animal animal = optionalAnimal.get();
+            animal.setActive(true);
+            return new AnimalDTO(animal);
+        } else {
+            throw new RuntimeException("Animal not found");
         }
     }
 
