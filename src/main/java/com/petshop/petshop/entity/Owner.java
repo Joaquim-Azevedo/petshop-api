@@ -1,6 +1,6 @@
 package com.petshop.petshop.entity;
 
-import com.petshop.petshop.dto.owner.OwnerDTO;
+import com.petshop.petshop.dto.owner.OwnerRequest;
 import com.petshop.petshop.dto.owner.OwnerResponse;
 
 import jakarta.persistence.Column;
@@ -27,11 +27,11 @@ public class Owner {
     private String email;
     private Boolean active;
 
-    public Owner(OwnerDTO dto) {
-        name = dto.getName();
-        cpf = dto.getCpf();
-        phone = dto.getPhone();
-        email = dto.getEmail();
+    public Owner(OwnerRequest request) {
+        name = request.getName();
+        cpf = request.getCpf();
+        phone = request.getPhone();
+        email = request.getEmail();
         this.active = true;
     }
 
