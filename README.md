@@ -75,9 +75,9 @@ cd petshop-api
 ## Melhorias Futuras
 
 - [✅] Adicionar mais validações
-- [ ] Criar testes com JUnit + Mockito (ainda aprendendo sobre)
+- Criar testes com JUnit + Mockito (ainda aprendendo sobre)
 - [✅] Refatorar nomes dos DTOs
-- [⏳] Implementar tratamento global de exceções (`@ControllerAdvice`)
+- [✅] Implementar tratamento global de exceções (`@RestControllerAdvice`)
 - [✅] Melhorar requisições aninhadas
 - [⏳] Adicionar serviços do petshop
 - [✅] Melhorar uso dos `.get()` em `Optional`
