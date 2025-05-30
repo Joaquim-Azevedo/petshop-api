@@ -12,8 +12,8 @@ import com.petshop.petshop.dto.owner.OwnerResponse;
 import com.petshop.petshop.dto.owner.OwnerWithAnimalsResponse;
 import com.petshop.petshop.entity.Animal;
 import com.petshop.petshop.entity.Owner;
+import com.petshop.petshop.exceptions.ElementNotFound;
 import com.petshop.petshop.exceptions.InvalidArgumentException;
-import com.petshop.petshop.exceptions.OwnerNotFound;
 import com.petshop.petshop.repository.AnimalRepository;
 import com.petshop.petshop.repository.OwnerRepository;
 
@@ -50,7 +50,7 @@ public class OwnerService {
 
         OwnerDTO ownerDTO = new OwnerDTO(ownerRepository.findOwnerByCpf(cpf)
                 .orElseThrow(
-                    () -> new OwnerNotFound("Dono/cliente com cpf '" + cpf + "' não encontrado")));
+                    () -> new ElementNotFound("Dono/cliente com cpf '" + cpf + "' não encontrado")));
         List<Animal> animals = animalRepository.findAllByOwnerCpf(cpf);
         
         // mapping animals to animal 'response'
@@ -70,7 +70,7 @@ public class OwnerService {
         }
         Owner owner = ownerRepository.findOwnerByCpf(cpf)
                 .orElseThrow(
-                    () -> new OwnerNotFound("Dono/cliente com cpf '" + cpf + "' não encontrado"));
+                    () -> new ElementNotFound("Dono/cliente com cpf '" + cpf + "' não encontrado"));
         
         owner.setActive(true);
         var ownerDTO = new OwnerDTO(owner);
@@ -79,12 +79,12 @@ public class OwnerService {
     }
 
     public void deleteOwnerByCpf(String cpf) {
-        if(cpf == null || cpf.length() != 11 || !cpf.matches("\\d")) {
+        if(cpf == null || cpf.length() != 11 || !cpf.matches("\\d+")) {
             throw new InvalidArgumentException("CPF inválido: deve conter 11 dígitos numéricos");
         }
         var owner = ownerRepository.findOwnerByCpf(cpf)
                 .orElseThrow(
-                    () -> new OwnerNotFound("Dono/cliente com cpf '" + cpf + "' não encontrado"));
+                    () -> new ElementNotFound("Dono/cliente com cpf '" + cpf + "' não encontrado"));
         owner.setActive(false);
     }
 }

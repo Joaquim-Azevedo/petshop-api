@@ -15,8 +15,10 @@ public class AnimalResponse {
         this.name = animal.getName();
         this.ownerCpf = animal.getOwner().getCpf();
         this.castrated = animal.isCastrated();
-        this.type = new AnimalTypeDTO(animal.getBreed().getType(), 
-                new BreedDTO(animal.getBreed()));
+        this.type = new AnimalTypeDTO(
+                animal.getBreed().getType(), 
+                new BreedDTO(animal.getBreed())
+        );
     }
 
     public AnimalResponse(String id, String name, String ownerCpf, Boolean castrated, AnimalTypeDTO type) {
