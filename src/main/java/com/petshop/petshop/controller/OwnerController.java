@@ -3,6 +3,8 @@ package com.petshop.petshop.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,31 +35,36 @@ public class OwnerController {
     private AnimalService animalService;
  
     @GetMapping
-    public List<OwnerResponse> getAllOwners() {
-        return ownerService.getAllActiveOwners();
+    public ResponseEntity<List<OwnerResponse>> getAllOwners() {
+        var listResponse = ownerService.getAllActiveOwners();
+        return ResponseEntity.ok(listResponse);
     }
 
     @GetMapping("/{cpf}")
-    public OwnerWithAnimalsResponse getOwnerWithAnimals(@PathVariable String cpf) {
-        return ownerService.getOwnerWithAnimalsByCpf(cpf);
+    public ResponseEntity<OwnerWithAnimalsResponse> getOwnerWithAnimals(@PathVariable String cpf) {
+        var response = ownerService.getOwnerWithAnimalsByCpf(cpf);
+        return ResponseEntity.ok(response);
     }
 
     @Transactional
     @PostMapping
-    public OwnerDTO addOwner(@RequestBody @Valid OwnerRequest owner) {
-        return ownerService.addOwner(owner);
+    public ResponseEntity<OwnerDTO> addOwner(@RequestBody @Valid OwnerRequest owner) {
+        var dto = ownerService.addOwner(owner);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
     @Transactional
     @PutMapping("/{cpf}")
-    public OwnerDTO reactiveAllOwnerWithAnimals(@PathVariable String cpf) {
-        return ownerService.reactiveOwnerWithAnimals(cpf);
+    public ResponseEntity<OwnerDTO> reactiveAllOwnerWithAnimals(@PathVariable String cpf) {
+        var dto = ownerService.reactiveOwnerWithAnimals(cpf);
+        return ResponseEntity.ok(dto);
     }
 
     @Transactional
     @DeleteMapping("/{cpf}")
-    public void deleteOwnerByCpf(@PathVariable String cpf) {
+    public ResponseEntity<Void> deleteOwnerByCpf(@PathVariable String cpf) {
         animalService.deleteAllOwnerAnimals(cpf);
         ownerService.deleteOwnerByCpf(cpf);
+        return ResponseEntity.noContent().build();
     }
 }

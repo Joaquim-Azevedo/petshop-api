@@ -56,13 +56,6 @@ public class ScheduleService {
             case "BANHO", "TOSA" -> request.getStartTime().plusMinutes(90);
             default -> request.getStartTime().plusMinutes(60);
         };
-        //        switch (request.getType().toUpperCase()) {
-        //            case "TOSA":
-        //            case "BANHO":
-        //                return request.getStartTime().plusMinutes(90);
-        //            default:
-        //                return request.getStartTime().plusMinutes(60);
-        //        }
     }
 
 

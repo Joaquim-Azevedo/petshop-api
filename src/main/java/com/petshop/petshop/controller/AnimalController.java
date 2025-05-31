@@ -3,6 +3,8 @@ package com.petshop.petshop.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,41 +30,50 @@ public class AnimalController {
     private AnimalService animalService;
 
     @GetMapping
-    public List<AnimalResponse> getAllActiveAnimals() {
-        return animalService.getAllActiveAnimals();
+    public ResponseEntity<List<AnimalResponse>> getAllActiveAnimals() {
+        var listResponse = animalService.getAllActiveAnimals();
+        return ResponseEntity.ok(listResponse);
     }
 
     @GetMapping("/{cpf}")
-    public List<AnimalResponse> getAnimalsByOwnerCpf(@PathVariable String cpf) {
-        return animalService.getAnimalsByOwnerCpf(cpf);
+    public ResponseEntity<List<AnimalResponse>> getAnimalsByOwnerCpf(@PathVariable String cpf) {
+        var listResponse = animalService.getAnimalsByOwnerCpf(cpf);
+        return ResponseEntity.ok(listResponse);
     }
 
     @GetMapping("/pet/{id}")
-    public AnimalResponse getAnimalById(@PathVariable String id) {
-        return animalService.getAnimalById(id);
+    public ResponseEntity<AnimalResponse> getAnimalById(@PathVariable String id) {
+        var response = animalService.getAnimalById(id);
+        return ResponseEntity.ok(response);
     }
     
     @Transactional
     @PostMapping
-    public AnimalDTO addAnimal(@RequestBody @Valid AnimalRequest request) {
-        return animalService.addAnimal(request);
+    public ResponseEntity<AnimalDTO> addAnimal(@RequestBody @Valid AnimalRequest request) {
+        var dto = animalService.addAnimal(request);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(dto);
     }
     
     @Transactional
     @PutMapping("/{id}")
-    public AnimalDTO reactiveAnimalById(@PathVariable String id) {
-        return animalService.reactiveAnimalById(id);
+    public ResponseEntity<AnimalDTO> reactiveAnimalById(@PathVariable String id) {
+        var dto = animalService.reactiveAnimalById(id);
+        return ResponseEntity.ok(dto);
     }
 
     @Transactional
     @PutMapping("/castrate/{id}")
-    public AnimalResponse castrateAnimalById(@PathVariable String id) {
-        return animalService.castrateAnimalById(id);
+    public ResponseEntity<AnimalResponse> castrateAnimalById(@PathVariable String id) {
+        var response = animalService.castrateAnimalById(id);
+        return ResponseEntity.ok(response);
     }
 
     @Transactional
     @DeleteMapping("/{id}")
-    public void deleteAnimalById(@PathVariable @Valid String id) {
+    public ResponseEntity<Void> deleteAnimalById(@PathVariable @Valid String id) {
         animalService.deleteAnimalById(id);
+        return ResponseEntity.noContent().build();
     }
 }

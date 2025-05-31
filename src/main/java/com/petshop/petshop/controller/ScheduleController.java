@@ -1,6 +1,8 @@
 package com.petshop.petshop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,25 +29,29 @@ public class ScheduleController {
     private ScheduleService scheduleService;
     
     @GetMapping("{cpf}")
-    public SchedulesOwnerWithAnimals getSchedulesByOwnerCpf(@PathVariable String cpf) {
-        return scheduleService.findAllSchedulesByCpf(cpf);
+    public ResponseEntity<SchedulesOwnerWithAnimals> getSchedulesByOwnerCpf(@PathVariable String cpf) {
+        var response = scheduleService.findAllSchedulesByCpf(cpf);
+        return ResponseEntity.ok(response);
     }
 
     @Transactional
     @PostMapping
-    public ScheduleResponse addSchedule(@RequestBody ScheduleRequest request) {
-        return scheduleService.addSchedule(request);
+    public ResponseEntity<ScheduleResponse> addSchedule(@RequestBody ScheduleRequest request) {
+        var response = scheduleService.addSchedule(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @Transactional
     @PutMapping
-    public ScheduleResponse changeScheduleStatus(@RequestBody @Valid ScheduleStatusDTO dto) {
-        return scheduleService.changeScheduleStatusByTime(dto);
+    public ResponseEntity<ScheduleResponse> changeScheduleStatus(@RequestBody @Valid ScheduleStatusDTO dto) {
+        var response = scheduleService.changeScheduleStatusByTime(dto);
+        return ResponseEntity.ok(response);
     }
 
     @Transactional
     @DeleteMapping("/{id}")
-    public ScheduleResponse cancelSchedule(@PathVariable Long id) {
-        return scheduleService.cancelScheduleById(id);
+    public ResponseEntity<ScheduleResponse> cancelSchedule(@PathVariable Long id) {
+        var response = scheduleService.cancelScheduleById(id);
+        return ResponseEntity.ok(response);
     }
 }
