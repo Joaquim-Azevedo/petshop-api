@@ -21,6 +21,7 @@ public class Schedule {
 
     @Enumerated(EnumType.STRING)
     private JobType job;
+    private Double jobValue;
     private LocalDateTime startTime;
     private LocalDateTime finishTime;
     
@@ -33,9 +34,10 @@ public class Schedule {
     @ManyToOne
     private Owner owner;
 
-    public Schedule(Long id, JobType job, LocalDateTime startTime, LocalDateTime finishTime, ScheduleStatus status,Animal animal, Owner owner) {
+    public Schedule(Long id, JobType job, Double jobValue, LocalDateTime startTime, LocalDateTime finishTime, ScheduleStatus status,Animal animal, Owner owner) {
         this.id = id;
         this.job = job;
+        this.jobValue = jobValue;
         this.startTime = startTime;
         this.finishTime = finishTime;
         this.status = status;
@@ -61,6 +63,14 @@ public class Schedule {
 
     public void setJob(JobType job) {
         this.job = job;
+    }
+
+    public Double getJobValue() {
+        return jobValue;
+    }
+
+    public void setJobValue(Double jobValue) {
+        this.jobValue = jobValue;
     }
 
     public LocalDateTime getStartTime() {

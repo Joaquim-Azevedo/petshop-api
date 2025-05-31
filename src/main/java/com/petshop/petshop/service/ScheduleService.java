@@ -1,6 +1,8 @@
 package com.petshop.petshop.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,33 +37,45 @@ public class ScheduleService {
     private AnimalRepository animalRepository;
 
     // Validating job by animals
-    // BANHO, TOSA ==> CACHORRO | GATO
+    // BANHO, TOSA ==> CACHORRO || GATO
     // CONSULTAVET ==> ALL
-    private void showerClippingValidation(ScheduleRequest request, Animal animal) {
-        if (request.getType().toUpperCase().equals("TOSA") || request.getType().toUpperCase().equals("BANHO")) {
-            switch (animal.getBreed().getType().getType()) {
+    private void validateShowerOrClipping(ScheduleRequest request, Animal animal) {
+        if (request.getType().equalsIgnoreCase("TOSA") || request.getType().equalsIgnoreCase("BANHO")) {
+            switch (animal.getBreed().getType().getName()) {
             case "Cachorro":
             case "Gato":
                 break;
             default:
-                throw new InvalidArgumentException("Tipo de animal não aceito para o serviço");
+                throw new InvalidArgumentException("Tipo de animal '" + animal.getBreed().getType().getName() + "' não aceito para o serviço");
             }
         }
     }
 
-    private LocalDateTime timeMeasure(ScheduleRequest request) {
-        switch (request.getType().toUpperCase()) {
-            case "TOSA":
-            case "BANHO":
-                return request.getStartTime().plusMinutes(90);
-            default:
-                return request.getStartTime().plusMinutes(60);
-        }
+    private LocalDateTime calculateFinishTime(ScheduleRequest request) {
+        return switch (request.getType().toUpperCase()) {
+            case "BANHO", "TOSA" -> request.getStartTime().plusMinutes(90);
+            default -> request.getStartTime().plusMinutes(60);
+        };
+        //        switch (request.getType().toUpperCase()) {
+        //            case "TOSA":
+        //            case "BANHO":
+        //                return request.getStartTime().plusMinutes(90);
+        //            default:
+        //                return request.getStartTime().plusMinutes(60);
+        //        }
     }
 
-    private void timeConflictsValidation(LocalDateTime start, LocalDateTime finish) {
-        System.out.println("Verificando");
-        var schedule = scheduleRepository.findConflicts(start, finish);
+
+    // Task -> improve calculate function
+    private Double calculateJobValue(ScheduleRequest request) {
+        return switch (request.getType().toUpperCase()) {
+            case "BANHO", "TOSA" -> 120D;
+            default -> 180D;
+        };
+    }
+
+    private void validateTimeConflicts(LocalDateTime start, LocalDateTime finish) {
+        List<Schedule> schedule = scheduleRepository.findConflicts(start, finish);
 
         if(!schedule.isEmpty()) {
             throw new RuntimeException("Horário já existente");
@@ -75,19 +89,22 @@ public class ScheduleService {
         Owner owner = ownerRepository.findOwnerByCpf(request.getOwnerCpf())
                 .orElseThrow(() -> new ElementNotFound("Dono não encontrado"));
 
-        // VALIDATIONS
-        // Generating the FinishTime based on type of the job
-        LocalDateTime finishTime = timeMeasure(request);
-
+        // Calculating the FinishTime based on type of the job
+        LocalDateTime finishTime = calculateFinishTime(request);
+        
+        // Calculating jobValue base on type of the job -> improve function <-
+        Double jobValue = calculateJobValue(request);
+        
         // Validating if the request animal is valid for the job type (BANHO, TOSA)
-        showerClippingValidation(request, animal);
+        validateShowerOrClipping(request, animal);
         
         // Validating if there is any time conflict
-        timeConflictsValidation(request.getStartTime(), finishTime);
+        validateTimeConflicts(request.getStartTime(), finishTime);
 
-        var schedule = new Schedule(
+        Schedule schedule = new Schedule(
             null,
             JobType.valueOf(request.getType().toUpperCase()),
+            jobValue,
             request.getStartTime(),
             finishTime,
             ScheduleStatus.AGENDADO,
@@ -100,23 +117,33 @@ public class ScheduleService {
     }
 
     public SchedulesOwnerWithAnimals findAllSchedulesByCpf(String cpf) {
-        var result = scheduleRepository.findByOwnerCpf(cpf);
-        var owner = ownerRepository.findOwnerByCpf(cpf)
+        List<Schedule> result = scheduleRepository.findByOwnerCpf(cpf);
+        Owner owner = ownerRepository.findOwnerByCpf(cpf)
                 .orElseThrow(() -> new ElementNotFound("Dono não encontrado"));
 
-        return new SchedulesOwnerWithAnimals(new OwnerDTO(owner), 
+        return new SchedulesOwnerWithAnimals(
+                new OwnerDTO(owner), 
                 result.stream().map(ScheduleMinDTO::new).toList());
     }
 
-    public ScheduleResponse confirmScheduleByAnimalId(ScheduleStatusDTO dto) {
-        var schedule = scheduleRepository.findByTime(dto.getTime())
+    public ScheduleResponse changeScheduleStatusByTime(ScheduleStatusDTO dto) {
+        Schedule schedule = scheduleRepository.findByTime(dto.getTime())
                 .orElseThrow(() -> new ElementNotFound("Agendamento não encontrado ou inexistente"));
-          
-        try {
-            schedule.setStatus(ScheduleStatus.valueOf(dto.getStatus().toUpperCase()));
-        } catch (IllegalArgumentException e) {
+        
+        Set<String> allowedStatuses = Set.of("CONFIRMADO", "FINALIZADO");
+        if(!allowedStatuses.contains(dto.getStatus().toUpperCase())) {
             throw new InvalidArgumentException("Tipo de status inválido");
         }
+        schedule.setStatus(ScheduleStatus.valueOf(dto.getStatus().toUpperCase()));
+
+        return new ScheduleResponse(schedule);
+    }
+
+    public ScheduleResponse cancelScheduleById(Long id) {
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new ElementNotFound("Agendamento não encontrado ou inexistente"));
+
+        schedule.setStatus(ScheduleStatus.CANCELADO);
 
         return new ScheduleResponse(schedule);
     }

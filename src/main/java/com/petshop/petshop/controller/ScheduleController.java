@@ -1,6 +1,7 @@
 package com.petshop.petshop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import com.petshop.petshop.dto.schedule.SchedulesOwnerWithAnimals;
 import com.petshop.petshop.service.ScheduleService;
 
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/schedule")
@@ -37,7 +39,13 @@ public class ScheduleController {
 
     @Transactional
     @PutMapping
-    public ScheduleResponse confirmSchedule(@RequestBody ScheduleStatusDTO dto) {
-        return scheduleService.confirmScheduleByAnimalId(dto);
+    public ScheduleResponse changeScheduleStatus(@RequestBody @Valid ScheduleStatusDTO dto) {
+        return scheduleService.changeScheduleStatusByTime(dto);
+    }
+
+    @Transactional
+    @DeleteMapping("/{id}")
+    public ScheduleResponse cancelSchedule(@PathVariable Long id) {
+        return scheduleService.cancelScheduleById(id);
     }
 }

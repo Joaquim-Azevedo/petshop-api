@@ -11,6 +11,7 @@ import com.petshop.petshop.entity.ScheduleStatus;
 public class ScheduleResponse {
     
     private JobType job;
+    private Double value;
     private LocalDateTime startTime;
     private LocalDateTime finishTime;
     private ScheduleStatus status;
@@ -19,6 +20,7 @@ public class ScheduleResponse {
 
     public ScheduleResponse(Schedule schedule) {
         job = schedule.getJob();
+        value = schedule.getJobValue();
         startTime = schedule.getStartTime();
         finishTime = schedule.getFinishTime();
         status = schedule.getStatus();
@@ -26,8 +28,9 @@ public class ScheduleResponse {
         owner = new OwnerResponse(schedule.getOwner());
     }
 
-    public ScheduleResponse(JobType job, LocalDateTime startTime, LocalDateTime finishTime, ScheduleStatus status, AnimalMinDTO animal, OwnerResponse owner) {
+    public ScheduleResponse(JobType job, Double value, LocalDateTime startTime, LocalDateTime finishTime, ScheduleStatus status, AnimalMinDTO animal, OwnerResponse owner) {
         this.job = job;
+        this.value = value;
         this.startTime = startTime;
         this.finishTime = finishTime;
         this.status = status;
@@ -41,6 +44,10 @@ public class ScheduleResponse {
 
     public JobType getJob() {
         return job;
+    }
+
+    public Double getValue() {
+        return value;
     }
 
     public LocalDateTime getStartTime() {
