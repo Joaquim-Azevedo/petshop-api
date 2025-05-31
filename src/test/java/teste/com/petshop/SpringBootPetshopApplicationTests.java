@@ -1,10 +1,10 @@
-package teste.spring_boot_teste;
+package teste.com.petshop;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SpringBootTesteApplicationTests {
+class SpringBootPetshopApplicationTests {
 
 	@Test
 	void contextLoads() {

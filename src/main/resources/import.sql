@@ -1,8 +1,8 @@
-INSERT INTO tb_animaltype_list (type) VALUES ('Cachorro');
-INSERT INTO tb_animaltype_list (type) VALUES ('Gato');
-INSERT INTO tb_animaltype_list (type) VALUES ('Pássaro');
-INSERT INTO tb_animaltype_list (type) VALUES ('Roedor');
-INSERT INTO tb_animaltype_list (type) VALUES ('Réptil');
+INSERT INTO tb_animaltype_list (name) VALUES ('Cachorro');
+INSERT INTO tb_animaltype_list (name) VALUES ('Gato');
+INSERT INTO tb_animaltype_list (name) VALUES ('Pássaro');
+INSERT INTO tb_animaltype_list (name) VALUES ('Roedor');
+INSERT INTO tb_animaltype_list (name) VALUES ('Réptil');
 
 INSERT INTO tb_breeds (type_id, name, normalized_name) VALUES (1, 'Labrador Retriever', 'labradorretriever');
 INSERT INTO tb_breeds (type_id, name, normalized_name) VALUES (1, 'Poodle', 'poodle');

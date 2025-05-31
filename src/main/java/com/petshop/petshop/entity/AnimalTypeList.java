@@ -15,15 +15,15 @@ public class AnimalTypeList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String type;
+    private String name;
 
     public AnimalTypeList(AnimalTypeDTO dto) {
-        type = dto.getName();
+        name = dto.getName();
     }
 
-    public AnimalTypeList(Long id, String type) {
+    public AnimalTypeList(Long id, String name) {
         this.id = id;
-        this.type = type;
+        this.name = name;
     }
 
     public AnimalTypeList() {
@@ -38,11 +38,11 @@ public class AnimalTypeList {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
+    public String getName() {
+        return name;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setName(String name) {
+        this.name = name;
     }
 }

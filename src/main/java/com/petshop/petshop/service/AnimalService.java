@@ -9,9 +9,8 @@ import com.petshop.petshop.dto.animal.AnimalDTO;
 import com.petshop.petshop.dto.animal.AnimalRequest;
 import com.petshop.petshop.dto.animal.AnimalResponse;
 import com.petshop.petshop.entity.Animal;
-import com.petshop.petshop.exceptions.AnimalNotFound;
+import com.petshop.petshop.exceptions.ElementNotFound;
 import com.petshop.petshop.exceptions.InvalidArgumentException;
-import com.petshop.petshop.exceptions.OwnerNotFound;
 import com.petshop.petshop.repository.AnimalRepository;
 import com.petshop.petshop.repository.BreedRepository;
 import com.petshop.petshop.repository.OwnerRepository;
@@ -32,8 +31,9 @@ public class AnimalService {
         String cpf = request.getOwnerCpf();
         var owner = ownerRepository.findOwnerByCpf(cpf)
                 .orElseThrow(
-                    () -> new OwnerNotFound("Dono/cliente com cpf '" + cpf + "' não encontrado"));
-        var breed = breedRepository.findByNormalizedName(request.getBreed());
+                    () -> new ElementNotFound("Dono/cliente com cpf '" + cpf + "' não encontrado"));
+        var breed = breedRepository.findByNormalizedName(request.getBreed())
+                .orElseThrow(() -> new ElementNotFound("Raça não encontrada"));
 
         // Creating animal with the request manually
         Animal animal = new Animal(
@@ -47,7 +47,6 @@ public class AnimalService {
         animalRepository.save(animal);
 
         return new AnimalDTO(animal);
-
     }
 
     // to implement
@@ -57,7 +56,7 @@ public class AnimalService {
         }
         var animal = animalRepository.findById(id)
                         .orElseThrow(
-                                () -> new AnimalNotFound("Animal com ID '" + id + "' não encontrado"));
+                                () -> new ElementNotFound("Animal com ID '" + id + "' não encontrado"));
         return new AnimalResponse(animal);
     }
 
@@ -76,11 +75,10 @@ public class AnimalService {
                 .toList();
     }
 
-    // Update --> neutred
     public AnimalResponse castrateAnimalById(String id) {
         var animal = animalRepository.findById(id)
                 .orElseThrow(
-                    () -> new AnimalNotFound("Animal com ID '" + id + "' não encontrado"));
+                    () -> new ElementNotFound("Animal com ID '" + id + "' não encontrado"));
                     
         animal.setCastrated(true);
         return new AnimalResponse(animal);
@@ -89,7 +87,7 @@ public class AnimalService {
     public AnimalDTO reactiveAnimalById(String id) {
         var animal = animalRepository.findById(id)
                 .orElseThrow(
-                    () -> new AnimalNotFound("Animal com ID '" + id + "' não encontrado"));
+                    () -> new ElementNotFound("Animal com ID '" + id + "' não encontrado"));
 
         animal.setActive(true);
         return new AnimalDTO(animal);
@@ -99,14 +97,14 @@ public class AnimalService {
     public void deleteAnimalById(String id) {
         var animal = animalRepository.findById(id)
                 .orElseThrow(
-                    () -> new AnimalNotFound("Animal com ID '" + id + "' não encontrado"));
+                    () -> new ElementNotFound("Animal com ID '" + id + "' não encontrado"));
 
         animal.setActive(false);
 
     }
 
     public void deleteAllOwnerAnimals(String cpf) {
-        if(cpf == null || cpf.length() != 11 || cpf.matches("\\d+")) {
+        if(cpf == null || cpf.length() != 11 || !cpf.matches("\\d+")) {
             throw new InvalidArgumentException("CPF inválido: deve conter 11 dígitos numéricos");
         }
         animalRepository.findAllByOwnerCpf(cpf).stream()

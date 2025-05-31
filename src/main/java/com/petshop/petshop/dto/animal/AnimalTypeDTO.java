@@ -13,7 +13,7 @@ public class AnimalTypeDTO {
     private BreedDTO breed;
 
     public AnimalTypeDTO(AnimalTypeList typeList, BreedDTO breed) {
-        name = typeList.getType();
+        name = typeList.getName();
         this.breed = breed;
     }
 
