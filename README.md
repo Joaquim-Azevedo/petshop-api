@@ -9,6 +9,7 @@ API REST desenvolvida com Spring Boot para gerenciar animais, donos e serviços 
 - Spring Data JPA
 - H2 Database (desenvolvimento)
 - Maven
+- ChatGPT (apenas para tirar dúvidas sobre erros/exceções, criar um import de animais mais comuns para Petshop para agilizar a aplicação e pedir um feedback mais técnico e abstrato)
 
 ## Como Rodar o Projeto
 
@@ -48,6 +49,10 @@ cd petshop-api
 - Consulta de dono com seus animais
 - Deleção e reativação de animais e donos
 - Cadastro automático de tipo de animal e raça
+- Agendamento de serviço por data
+- Cálculo do valor e do tempo de trabalho por tipo de animal e tipo de serviço.
+- Mudança de status de serviço (confirmado, finalizado)
+- Cancelamento de serviço
 
 ---
 
@@ -59,7 +64,7 @@ cd petshop-api
 
 ---
 
-## Pontos de Melhoria
+## Pontos de Melhoria ✅
 
 | Aspecto                       | Detalhe                                                                                                                                        |
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -79,7 +84,7 @@ cd petshop-api
 - [✅] Refatorar nomes dos DTOs
 - [✅] Implementar tratamento global de exceções (`@RestControllerAdvice`)
 - [✅] Melhorar requisições aninhadas
-- [⏳] Adicionar serviços do petshop
+- [✅] Adicionar serviços do petshop
 - [✅] Melhorar uso dos `.get()` em `Optional`
 - [✅] Documentação de API com Swagger UI
 
